@@ -1,0 +1,97 @@
+server:
+  shutdown: graceful
+  port: 11080
+
+logging:
+  level:
+    root: DEBUG
+    org.hibernate: DEBUG
+
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:gradle;MODE=MYSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: admin
+  jackson:
+    mapper:
+      default-view-inclusion: true
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true
+
+    #    org:
+    #      hibernate:
+    #        envers:
+    #          audit_table_suffix: _history
+    #          revision_field_name: revision_no
+    #          revision_type_field_name: revision_type
+    #          store_data_at_delete: true
+    #          revision_on_collection_change: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true
+
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+feign:
+  okhttp:
+    enabled: true
+  client:
+    config:
+      default:
+
+        connectTimeout: 500
+        readTimeout: 1000
+        logger-level: full
+
+resilience4j:
+  retry:
+    configs:
+      default:
+        max-attempts: 2
+        waitDuration: 2
+        ignore-exceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+          - feign.FeignException.BadRequest
+
+
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        minimumNumberOfCalls: 10
+        slidingWindowSize: 50
+        permittedNumberOfCallsInHalfOpenState: 2
+        automaticTransitionFromOpenToHalfOpenEnabled: false
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        ignore-exceptions:
+          - feign.FeignException.BadRequest
+
+external:
+  kakao-search:
+    url: https://dapi.kakao.com/v2/search
+    api-key: e059df5aaa68640fc91b49cec229b260
+  naver-search:
+    url: https://openapi.naver.com/v1/search
+    client-id: PJ2S_01VDogIiKJmtl9d
+    client-secret: d7ONI7ZWiB
+
+
+
+
+
