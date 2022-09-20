@@ -3,13 +3,13 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
     id 'io.freefair.lombok' version '6.5.1'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+    id 'jacoco'
 }
-//
-//apply plugin: 'java'
-//apply plugin: 'io.spring.dependency-management'
 
-group 'org.example'
+group 'dwuthk'
 version '1.0-SNAPSHOT'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
@@ -19,47 +19,109 @@ tasks.withType(JavaCompile){
     options.encoding = "UTF-8"
 }
 
-dependencies {
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+}
 
+dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-//    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
-
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
 
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.4'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-circuitbreaker-resilience4j', version: '2.1.4'
 
-    testImplementation group: "org.springframework.cloud", name:  "spring-cloud-contract-wiremock", version: "3.1.4"
-
     implementation group: 'com.querydsl', name: 'querydsl-jpa', version: '5.0.0'
     implementation group: 'com.querydsl', name: 'querydsl-apt', version: '5.0.0'
-    implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
-//    implementation group: 'jakarta.annotation', name: 'jakarta.annotation-api', version: '2.1.1'
-    implementation group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.2.Final'
-
-
     implementation group: 'io.github.openfeign', name: 'feign-okhttp', version: '11.9.1'
-
-
+    implementation group: 'org.ehcache', name: 'ehcache', version: '3.10.1'
+    implementation group: 'javax.cache', name: 'cache-api', version: '1.1.1'
     implementation group: 'com.h2database', name: 'h2', version: '2.1.214'
+
+
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testImplementation group: "org.springframework.cloud", name:  "spring-cloud-contract-wiremock", version: "3.1.4"
     testImplementation group: 'com.h2database', name: 'h2', version: '2.1.214'
-
-
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
-//
-//configurations.implementation {
-//    exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
-//}
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
+bootJar {
+    mainClass = 'dwuthk.search.SearchApplication'
+}
+
+
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['org.gradle.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.3
+            }
+        }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
 }

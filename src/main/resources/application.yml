@@ -4,13 +4,14 @@ server:
 
 logging:
   level:
-    root: DEBUG
-    org.hibernate: DEBUG
+    root: INFO
+    org.hibernate: INFO
+    org.hibernate.engine: WARN
 
 
 spring:
   datasource:
-    url: jdbc:h2:mem:gradle;MODE=MYSQL
+    url: jdbc:h2:mem:blog;MODE=MYSQL;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
     username: sa
     password: admin
@@ -22,30 +23,24 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: create-drop
-
     show-sql: false
     open-in-view: false
     properties:
       hibernate:
         format_sql: true
         generate_statistics: true
-
-    #    org:
-    #      hibernate:
-    #        envers:
-    #          audit_table_suffix: _history
-    #          revision_field_name: revision_no
-    #          revision_type_field_name: revision_type
-    #          store_data_at_delete: true
-    #          revision_on_collection_change: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
     defer-datasource-initialization: true
-
 
   h2:
     console:
       enabled: true
       path: /h2-console
+
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+    type: jcache
 
 feign:
   okhttp:
@@ -53,21 +48,19 @@ feign:
   client:
     config:
       default:
-
-        connectTimeout: 500
-        readTimeout: 1000
-        logger-level: full
+        connectTimeout: 1000
+        readTimeout: 2000
+        logger-level: basic
 
 resilience4j:
   retry:
     configs:
       default:
-        max-attempts: 2
-        waitDuration: 2
+        max-attempts: 3
+        waitDuration: 3
         ignore-exceptions:
           - io.github.resilience4j.circuitbreaker.CallNotPermittedException
           - feign.FeignException.BadRequest
-
 
   circuitbreaker:
     configs:
@@ -91,7 +84,8 @@ external:
     client-id: PJ2S_01VDogIiKJmtl9d
     client-secret: d7ONI7ZWiB
 
-
+operation:
+  favoriteDefaultDays: 7
 
 
 
