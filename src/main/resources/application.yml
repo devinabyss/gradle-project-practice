@@ -6,6 +6,7 @@ logging:
   level:
     root: INFO
     org.hibernate: INFO
+    org.hibernate.engine: WARN
 
 
 spring:
