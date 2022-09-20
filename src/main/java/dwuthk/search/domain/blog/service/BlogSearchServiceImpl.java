@@ -9,6 +9,7 @@ import dwuthk.search.external.event.model.KeywordSearchedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -43,9 +44,10 @@ public class BlogSearchServiceImpl implements BlogSearchService {
 
 
     @Override
-    public List<KeywordSearchCountDTO> getMostSearchedKeywords(KeywordStatisticsCondition condition, Pageable pageable) {
-        return keywordSearchHistoryRepository.findMostSearchedKeyword(KeywordStatisticsCondition.builder()
-                .from(Objects.nonNull(condition.getFrom()) ? condition.getFrom() : LocalDateTime.now().minusMinutes(favoriteDefaultDays).truncatedTo(ChronoUnit.DAYS))
+    @Cacheable(value = "keywordCount", key = "{#condition.from + '|' + #condition.to + '|' + #pageable.pageSize + '|' + #pageable.pageNumber}")
+    public List<KeywordSearchCountDTO> getMostSearchedKeywords(KeywordStatisticsConditionParams condition, Pageable pageable) {
+        return keywordSearchHistoryRepository.findMostSearchedKeyword(KeywordStatisticsConditionParams.builder()
+                .from(Objects.nonNull(condition.getFrom()) ? condition.getFrom() : LocalDateTime.now().minusDays(favoriteDefaultDays).truncatedTo(ChronoUnit.DAYS))
                 .to(Objects.nonNull(condition.getTo()) ? condition.getTo() : LocalDateTime.now())
                 .build(), pageable);
     }

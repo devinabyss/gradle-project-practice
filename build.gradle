@@ -19,6 +19,15 @@ tasks.withType(JavaCompile){
     options.encoding = "UTF-8"
 }
 
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+}
+
 dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
@@ -70,6 +79,10 @@ configurations {
         extendsFrom annotationProcessor
     }
     querydsl.extendsFrom compileClasspath
+}
+
+bootJar {
+    mainClass = 'dwuthk.search.SearchApplication'
 }
 
 

@@ -25,7 +25,7 @@ public class KeywordSearchHistoryRepositoryImpl implements KeywordSearchHistoryR
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<KeywordSearchCountDTO> findMostSearchedKeyword(BlogSearchService.KeywordStatisticsCondition condition, Pageable pageable) {
+    public List<KeywordSearchCountDTO> findMostSearchedKeyword(BlogSearchService.KeywordStatisticsConditionParams condition, Pageable pageable) {
         NumberPath<Long> aliasCount = Expressions.numberPath(Long.class, "cnt");
 
         return queryFactory

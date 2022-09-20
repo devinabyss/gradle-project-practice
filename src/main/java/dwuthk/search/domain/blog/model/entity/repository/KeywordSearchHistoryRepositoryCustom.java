@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface KeywordSearchHistoryRepositoryCustom {
 
-    List<KeywordSearchCountDTO> findMostSearchedKeyword(BlogSearchService.KeywordStatisticsCondition condition, Pageable pageable);
+    List<KeywordSearchCountDTO> findMostSearchedKeyword(BlogSearchService.KeywordStatisticsConditionParams condition, Pageable pageable);
 }

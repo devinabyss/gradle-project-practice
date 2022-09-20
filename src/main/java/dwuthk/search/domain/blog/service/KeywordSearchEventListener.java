@@ -1,7 +1,9 @@
 package dwuthk.search.domain.blog.service;
 
 
+import dwuthk.search.domain.blog.model.entity.ConsumeFailedKeywordSearchedEvent;
 import dwuthk.search.domain.blog.model.entity.KeywordSearchHistory;
+import dwuthk.search.domain.blog.model.entity.repository.ConsumeFailedKeywordSearchedEventRepository;
 import dwuthk.search.domain.blog.model.entity.repository.KeywordSearchHistoryRepository;
 import dwuthk.search.external.event.model.KeywordSearchedEvent;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ public class KeywordSearchEventListener {
 
     private final KeywordSearchHistoryRepository repository;
 
+    private final ConsumeFailedKeywordSearchedEventRepository failedRepository;
+
     @Async("eventProcessExecutor")
     @EventListener(KeywordSearchedEvent.class)
     @Transactional
@@ -27,8 +31,10 @@ public class KeywordSearchEventListener {
         KeywordSearchHistory history = KeywordSearchHistory.builder()
                 .event(event)
                 .build();
-
-        repository.save(history);
-
+        try {
+            repository.save(history);
+        } catch (Exception e) {
+            failedRepository.save(ConsumeFailedKeywordSearchedEvent.builder().event(event).build());
+        }
     }
 }

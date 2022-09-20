@@ -13,7 +13,7 @@
    - 검색 카운팅의 조건이 검색이 완료된, 이라는 정의가 별도로 없어 질의 시도를 카운팅의 기준으로 삼았습니다.
    - 검색 요청이 서비스 레이어로 넘어오면 즉시 질의 히스토리가 Publisher - Listener 를 통해 기록됩니다.
      - Publish 가 실패할 경우 실패한 질의 기록을 남기며, 이렇게 남은 기록은 별도의 배치 프로세스를 통해 재발행는 것을 의도하였으나, 재발행 로직까지 구현되어 있진 않습니다.
-     - Listener 의 Event Consume 실패의 케이스도 Consume 실패의 기록을 별도로 가지면 더 좋을 것으로 보이나, 구현되어 있진 않습니다.
+     - Listener 의 Event Consume 실패의 케이스도 Consume 실패의 기록이 별도로 기록되고 있으며, 마찬가지로 배치 프로세스가 추가 고려될 수 있을 것 같습니다.
    - 검색어 카운팅 조회는 JPA - QueryDSL 을 통해 질의 히스토리를 키워드 기준으로 집합 질의 합니다.
    - 질의 시간에 따라 차이가 날 수는 있으나, 최종적으로 질의 수에 근접한 결과가 나도록 하는 것이 구현 의도 방향 입니다.
      - 별도 배치 프로세싱을 통해 집계 데이터를 내고, 집계 데이터 + 이력 데이터 로 조회하는 추가 보완 방향을 고려할 수 있을 것 같습니다.
@@ -43,7 +43,7 @@
 ## 블로그 검색
 - URI : `/blog/search`
 - Method : `GET`
-- Response Body : `application/json`
+- Response Content-Type : `application/json`
 
 ### Request Parameters
 | 키 | 필수 여부 | 설명 | 예시 |
@@ -129,7 +129,7 @@
 ## 블로그 검색어 순위
 - URI : `/blog/favoriteKeywords`
 - Method : `GET`
-- Response Body : `application/json`
+- Response Content-Type : `application/json`
 
 ### Request Parameters
 | 키 | 필수여부 | 설명 | 예시 |

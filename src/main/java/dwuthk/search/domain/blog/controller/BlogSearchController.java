@@ -49,7 +49,7 @@ public class BlogSearchController {
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") LocalDateTime to
     ) {
 
-        List<KeywordSearchCountDTO> list = blogSearchService.getMostSearchedKeywords(BlogSearchService.KeywordStatisticsCondition.builder()
+        List<KeywordSearchCountDTO> list = blogSearchService.getMostSearchedKeywords(BlogSearchService.KeywordStatisticsConditionParams.builder()
                 .from(from).to(to).build(), PageRequest.of(1, 10));
 
         return new ResponseEntity<>(list, HttpStatus.OK);

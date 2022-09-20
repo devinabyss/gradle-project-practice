@@ -1,7 +1,6 @@
 package dwuthk.search.external.api.search.kakao;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import dwuthk.search.external.api.search.SearchClient;
 import dwuthk.search.external.api.search.common.model.ExternalSearchService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -10,8 +9,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.io.Serializable;
 
 
 @FeignClient(name = "kakaoSearch",

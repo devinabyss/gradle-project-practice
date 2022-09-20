@@ -1,9 +1,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.ehcache.org/v3"
-        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
-        xsi:schemaLocation="
-            http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
-            http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
     <cache-template name="default">
         <key-type>java.lang.Object</key-type>
@@ -19,5 +16,6 @@
 
     <cache alias="kakaoBlogSearchResult" uses-template="default"/>
     <cache alias="naverBlogSearchResult" uses-template="default"/>
+    <cache alias="keywordCount" uses-template="default" />
 </config>
 

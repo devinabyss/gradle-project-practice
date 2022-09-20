@@ -1,4 +1,4 @@
-package dwuthk.search.domain.blog.entity.repository;
+package dwuthk.search.domain.blog.model.entity.repository;
 
 import dwuthk.search.config.PersistenceConfig;
 import dwuthk.search.domain.blog.model.KeywordSearchCountDTO;
@@ -64,7 +64,7 @@ class KeywordSearchHistoryRepositoryIntegrationTest {
         log.info("## History : {}", newHistory);
 
 
-        List<KeywordSearchCountDTO> list = repository.findMostSearchedKeyword(BlogSearchService.KeywordStatisticsCondition.builder()
+        List<KeywordSearchCountDTO> list = repository.findMostSearchedKeyword(BlogSearchService.KeywordStatisticsConditionParams.builder()
                 .from(LocalDateTime.now().minusDays(3))
                 .build(), PageRequest.of(1, 10));
 

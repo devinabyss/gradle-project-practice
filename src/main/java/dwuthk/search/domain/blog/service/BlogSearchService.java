@@ -17,11 +17,11 @@ public interface BlogSearchService {
     BlogSearchResult searchBlog(SearchBlogParams keyword);
 
 
-    List<KeywordSearchCountDTO> getMostSearchedKeywords(KeywordStatisticsCondition condition, Pageable pageable);
+    List<KeywordSearchCountDTO> getMostSearchedKeywords(KeywordStatisticsConditionParams condition, Pageable pageable);
 
     @Value
     @Builder
-    class KeywordStatisticsCondition {
+    class KeywordStatisticsConditionParams {
         LocalDateTime from;
         LocalDateTime to;
     }

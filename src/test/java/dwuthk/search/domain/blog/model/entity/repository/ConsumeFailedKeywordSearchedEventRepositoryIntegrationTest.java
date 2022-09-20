@@ -1,8 +1,9 @@
-package dwuthk.search.external.event.model.entity.repository;
+package dwuthk.search.domain.blog.model.entity.repository;
+
 
 import dwuthk.search.config.PersistenceConfig;
+import dwuthk.search.domain.blog.model.entity.ConsumeFailedKeywordSearchedEvent;
 import dwuthk.search.external.event.model.KeywordSearchedEvent;
-import dwuthk.search.external.event.model.entity.PublishMissedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -21,28 +22,30 @@ import java.util.List;
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
 @Import(PersistenceConfig.class)
-@DisplayName("통합 - 저장소 - 발행 실패 이벤트")
+@DisplayName("통합 - 저장소 - 키워드 검색 이벤트 소비 실패")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class PublishMissedEventRepositoryIntegrationTest {
+class ConsumeFailedKeywordSearchedEventRepositoryIntegrationTest {
 
     @Autowired
-    private PublishMissedEventRepository repository;
+    private ConsumeFailedKeywordSearchedEventRepository repository;
+
 
     @Test
     public void testInsert() {
 
-        KeywordSearchedEvent source = new KeywordSearchedEvent("test", LocalDateTime.now());
-        PublishMissedEvent entity = PublishMissedEvent.builder().event(source).json("{}").build();
+        ConsumeFailedKeywordSearchedEvent entity = ConsumeFailedKeywordSearchedEvent.builder()
+                .event(new KeywordSearchedEvent("유재석", LocalDateTime.now()))
+                .build();
 
         repository.save(entity);
+        log.info("## Entity : {}", entity);
 
-        log.info("## PublishMissedEvent : {}", entity);
-
-        List<PublishMissedEvent> histories = repository.findAll();
-        log.info("## Entities : {}", histories);
+        List<ConsumeFailedKeywordSearchedEvent> list = repository.findAll();
+        log.info("## Entities : {}", list);
 
         Assertions.assertNotNull(entity.getId());
-        Assertions.assertEquals(1, histories.size());
+        Assertions.assertEquals(1, list.size());
     }
 
 }
+
