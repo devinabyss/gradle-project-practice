@@ -29,7 +29,9 @@ public interface BlogSearchExternalConnectService {
                 case NAVER -> switch (defaultSort) {
                     case ACCURACY -> "sim";
                     case RECENCY -> "date";
+
                 };
+                default -> defaultSort.name();
             };
         }
     }

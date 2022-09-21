@@ -16,6 +16,10 @@
 
     <cache alias="kakaoBlogSearchResult" uses-template="default"/>
     <cache alias="naverBlogSearchResult" uses-template="default"/>
-    <cache alias="keywordCount" uses-template="default" />
+    <cache alias="keywordCount" uses-template="default" >
+        <expiry>
+            <ttl unit="seconds">1</ttl>
+        </expiry>
+    </cache>
 </config>
 

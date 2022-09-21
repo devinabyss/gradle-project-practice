@@ -22,7 +22,7 @@ public class SearchApplication {
     @Bean
     public Executor eventProcessExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
+        executor.setCorePoolSize(4);
         executor.setMaxPoolSize(50);
         executor.setQueueCapacity(1000);
         executor.setThreadNamePrefix("event-executor-");

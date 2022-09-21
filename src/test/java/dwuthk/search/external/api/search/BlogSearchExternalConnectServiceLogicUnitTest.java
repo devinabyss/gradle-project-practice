@@ -1,5 +1,6 @@
 package dwuthk.search.external.api.search;
 
+import dwuthk.search.common.exception.CustomException;
 import dwuthk.search.external.api.search.common.model.BlogSearchResult;
 import dwuthk.search.external.api.search.common.model.ExternalSearchService;
 import dwuthk.search.external.api.search.kakao.KaKaoSearchApiClient;
@@ -80,6 +81,21 @@ class BlogSearchExternalConnectServiceLogicUnitTest {
                 .searchBlog(params.getKeyword(), params.getSuitableSort(ExternalSearchService.NAVER), params.getPage(), params.getPageSize());
 
         Assertions.assertEquals(ExternalSearchService.NAVER, result.getSearchSource());
+    }
+
+    @Test
+    @DisplayName("SearchClient 존재하지 않는 클라이언트")
+    public void testNotExistsClientCallOrder() {
+
+        Assertions.assertThrows(CustomException.class, () -> {
+            BlogSearchExternalConnectService.SearchBlogExternalParams params = BlogSearchExternalConnectService.SearchBlogExternalParams.builder()
+                    .keyword("유재석")
+                    .firstTryService(ExternalSearchService.ETC)
+                    .build();
+
+            BlogSearchResult result = service.searchBlogExternal(params);
+        });
+
     }
 
     @Test
