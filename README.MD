@@ -1,6 +1,7 @@
 # 개요
 ## Boot Jar 파일 위치
-- https://github.com/devinabyss/gradle-project-practice/blob/master/jar/gradle-project-practice.jar
+- Jar Git 주소 : https://github.com/devinabyss/gradle-project-practice/blob/master/jar/gradle-project-practice.jar
+- Download Link : https://github.com/devinabyss/gradle-project-practice/raw/master/jar/gradle-project-practice.jar
 
 ## 기능 구현
 1. 블로그 검색
