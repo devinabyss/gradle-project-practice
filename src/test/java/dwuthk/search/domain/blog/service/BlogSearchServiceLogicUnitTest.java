@@ -19,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 
 @DisplayName("유닛 - 블로그 검색 서비스 로직")
 @ExtendWith({MockitoExtension.class})
@@ -36,6 +37,7 @@ class BlogSearchServiceLogicUnitTest {
 
     @Mock
     private KeywordSearchHistoryRepository keywordSearchHistoryRepository;
+
 
 
     @Test

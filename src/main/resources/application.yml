@@ -50,7 +50,7 @@ feign:
       default:
         connectTimeout: 1000
         readTimeout: 2000
-        logger-level: basic
+        logger-level: full
 
 resilience4j:
   retry:
