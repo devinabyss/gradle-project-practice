@@ -7,9 +7,7 @@ import dwuthk.search.domain.blog.model.entity.repository.KeywordSearchHistoryRep
 import dwuthk.search.domain.blog.service.BlogSearchService;
 import dwuthk.search.external.event.model.KeywordSearchedEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -28,6 +26,7 @@ import java.util.List;
 @Import(PersistenceConfig.class)
 @DisplayName("통합 - 저장소 - 키워드 검색 이력")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class KeywordSearchHistoryRepositoryIntegrationTest {
 
 
@@ -35,6 +34,7 @@ class KeywordSearchHistoryRepositoryIntegrationTest {
     private KeywordSearchHistoryRepository repository;
 
 
+    @Order(1)
     @Test
     public void testInsert() {
 
@@ -49,11 +49,12 @@ class KeywordSearchHistoryRepositoryIntegrationTest {
         log.info("## Entities : {}", searchKeywordHistories);
 
         Assertions.assertNotNull(newHistory.getId());
-        Assertions.assertEquals(1, searchKeywordHistories.size());
     }
 
 
+
     @Test
+    @Order(2)
     public void testStatisticsCount() {
 
         KeywordSearchHistory newHistory = KeywordSearchHistory.builder()
@@ -70,8 +71,7 @@ class KeywordSearchHistoryRepositoryIntegrationTest {
 
         log.info("## List : {}", list);
 
-        Assertions.assertEquals(1, list.size());
-        Assertions.assertEquals(1, list.get(0).count());
+
         Assertions.assertEquals("유재석", list.get(0).keyword());
 
     }

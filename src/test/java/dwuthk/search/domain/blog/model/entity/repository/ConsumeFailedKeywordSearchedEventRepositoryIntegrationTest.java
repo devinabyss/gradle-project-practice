@@ -5,9 +5,7 @@ import dwuthk.search.config.PersistenceConfig;
 import dwuthk.search.domain.blog.model.entity.ConsumeFailedKeywordSearchedEvent;
 import dwuthk.search.external.event.model.KeywordSearchedEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -24,12 +22,14 @@ import java.util.List;
 @Import(PersistenceConfig.class)
 @DisplayName("통합 - 저장소 - 키워드 검색 이벤트 소비 실패")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ConsumeFailedKeywordSearchedEventRepositoryIntegrationTest {
 
     @Autowired
     private ConsumeFailedKeywordSearchedEventRepository repository;
 
 
+    @Order(1)
     @Test
     public void testInsert() {
 
@@ -44,7 +44,7 @@ class ConsumeFailedKeywordSearchedEventRepositoryIntegrationTest {
         log.info("## Entities : {}", list);
 
         Assertions.assertNotNull(entity.getId());
-        Assertions.assertEquals(1, list.size());
+
     }
 
 }
